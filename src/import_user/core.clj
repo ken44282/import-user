@@ -1,10 +1,10 @@
 (ns import-user.core
   (:gen-class)
-  (:require [clojure.java.io :as io])
-  (:require [clojure.data.csv :as csv])
-  (:require [clojure.java.jdbc :as jdbc])
-  (:require [clojure.tools.logging :as log])
-  (:require [hugsql.core :as hugsql])
+  (:require [clojure.java.io :as io]
+            [clojure.data.csv :as csv]
+            [clojure.java.jdbc :as jdbc]
+            [clojure.tools.logging :as log]
+            [hugsql.core :as hugsql])
   (:import (java.util Properties)))
 
 (def conf (Properties.))
