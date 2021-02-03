@@ -43,6 +43,7 @@
       (catch Exception e
         (log/error e "Error:" (.toString f)))
       (finally
+        (when (.isFile f) (.delete f))
         (.renameTo
           f
           (io/file (.getProperty conf "dir.done")
