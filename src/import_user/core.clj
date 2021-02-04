@@ -43,11 +43,12 @@
       (catch Exception e
         (log/error e "Error:" (.toString f)))
       (finally
-        (when (.isFile f) (.delete f))
-        (.renameTo
-          f
-          (io/file (.getProperty conf "dir.done")
-                   (.getName f)))))))
+        (let [dest-file (io/file (.getProperty conf "dir.done")
+                                 (.getName f))]
+          (when (.isFile dest-file) (.delete dest-file))
+          (.renameTo
+            f
+            dest-file))))))
 
 (defn output-users []
   (let [output-file (io/file (.getProperty conf "dir.result")
