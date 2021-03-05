@@ -1,6 +1,6 @@
 # import-user
 
-This program reads the CSV file and registers it in the DB.
+This program is a program that reads a CSV file and registers it in the database.
 
 ## License
 
