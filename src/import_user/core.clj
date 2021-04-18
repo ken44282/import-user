@@ -4,17 +4,19 @@
             [clojure.data.csv :as csv]
             [clojure.java.jdbc :as jdbc]
             [clojure.tools.logging :as log]
-            [hugsql.core :as hugsql])
-  (:import (java.util Properties)))
+            [cprop.core :refer [load-config]]
+            [cprop.source :as source]
+            [hugsql.core :as hugsql]))
 
-(def conf (Properties.))
-(.load conf (ClassLoader/getSystemResourceAsStream
-              "system.properties"))
+(def conf (load-config
+            :merge
+            [(source/from-system-props)
+             (source/from-env)]))
 
-(def db {:subprotocol (.getProperty conf "db.subprotocol")
-         :subname (.getProperty conf "db.subname")
-         :user (.getProperty conf "db.user")
-         :password (.getProperty conf "db.password")})
+(def db {:subprotocol (:import-user-db-subprotocol conf)
+         :subname (:import-user-db-subname conf)
+         :user (:import-user-db-user conf)
+         :password (:import-user-db-password conf)})
 
 (hugsql/def-db-fns "users.sql")
 
@@ -43,16 +45,14 @@
       (catch Exception e
         (log/error e "Error:" (.toString f)))
       (finally
-        (let [dest-file (io/file (.getProperty conf "dir.done")
-                                 (.getName f))]
+        (let [dest-file (io/file (:import-user-dir-done conf) (.getName f))]
           (when (.isFile dest-file) (.delete dest-file))
           (.renameTo
             f
             dest-file))))))
 
 (defn output-users []
-  (let [output-file (io/file (.getProperty conf "dir.result")
-                             "users.csv")]
+  (let [output-file (io/file (:import-user-dir-result conf) "users.csv")]
     (with-open [writer (io/writer output-file)]
       (->> (select-users db {})
            (map #(vector (:id %) (:name %) (:pass %)))
@@ -61,7 +61,7 @@
 (defn -main [& args]
   (do
     (log/info "**** import-user start ****")
-    (->> (.getProperty conf "dir.spool")
+    (->> (:import-user-dir-spool conf)
          (io/file)
          (file-seq)
          (filter #(.isFile %))

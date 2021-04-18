@@ -1,0 +1,8 @@
+{:import-user-db-subprotocol "postgresql"
+ :import-user-db-subname "//localhost/testdb"
+ :import-user-db-user "postgres"
+ :import-user-db-password "postgres"
+ :import-user-dir-spool "c:/var/lib/import_user/spool"
+ :import-user-dir-done "c:/var/lib/import_user/done"
+ :import-user-dir-result "c:/var/lib/import_user/result"
+}

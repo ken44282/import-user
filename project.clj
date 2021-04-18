@@ -11,8 +11,10 @@
                  [org.clojure/tools.logging "1.1.0"]
                  [org.slf4j/slf4j-api "1.7.30"]
                  [org.apache.logging.log4j/log4j-slf4j-impl "2.14.0"]
-                 [org.apache.logging.log4j/log4j-core "2.14.0"]]
+                 [org.apache.logging.log4j/log4j-core "2.14.0"]
+                 [cprop "0.1.17"]]
   :repl-options {:init-ns import-user.core}
   :jvm-opts ["-Dclojure.tools.logging.factory=clojure.tools.logging.impl/slf4j-factory"]
   :main import-user.core
-  :aot [import-user.core])
+  :aot [import-user.core]
+  :profiles {:dev {:jvm-opts ["-Dconf=dev-config.edn" "-Dfile.encoding=MS932"]}})
